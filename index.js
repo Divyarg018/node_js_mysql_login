@@ -24,15 +24,8 @@ db.connect((err) => {
     }
 })
 
-app.get("/", (req, res) => {
-    // res.send("<h1>Home Page</h1>")
-    res.render("index");
-});
-
-app.get("/register", (req, res) => {
-    // res.send("<h1>Home Page</h1>")
-    res.render("register");
-})
+app.use('/', require('./routes/pages.js'));
+app.use('/auth', require('./routes/auth'));
 
 
 
