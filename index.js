@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mysql = require('mysql');
 const dotenv = require('dotenv');
 
@@ -10,6 +11,10 @@ const db = mysql.createConnection({
     password:process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 })
+const publicDirectory = path.join(__dirname, './public');
+app.use(express.static(publicDirectory));
+
+app.set('view engine', 'hbs')
 
 db.connect((err)=>{
     if(err){
@@ -20,8 +25,11 @@ db.connect((err)=>{
 })
 
 app.get("/", (req,res)=>{
-    res.send("<h1>Home Page</h1>")
+    // res.send("<h1>Home Page</h1>")
+    res.render("index");
 })
+
+
 
 app.listen(5000, ()=>{
     console.log("Server Started on port 5000");
