@@ -10,11 +10,11 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
-exports.register = (req, res) => {
+module.exports.register = (req, res) => {
     console.log(req.body);
 
     const { name, email, password, passwordConfirm } = req.body;
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results)=>{
+    db.query('SELECT EMAIL FROM USERS WHERE EMAIL = ?', [email], async (error, results)=>{
         if(error){
             console.log(error);
         }
@@ -28,9 +28,9 @@ exports.register = (req, res) => {
 
         })
     }
-    let haashedPassword = await brcrypt.hash(password, 8);
-    console.log(haashedPassword);
-    db.query('INSERT INTO users SET ? ', {name:name, email:email, password:haashedPassword}, (error, results)=>{
+    // let haashedPassword = await brcrypt.hash(password, 8);
+    // console.log(haashedPassword);
+    db.query('INSERT INTO USERS SET ? ', {name:name, email:email, password:password}, (error, results)=>{
 if(error){
     console.log(error);
 }else{
@@ -42,4 +42,25 @@ if(error){
     })
     })
     
+}
+
+
+module.exports.login = (req, res) => {
+    console.log(req.body);
+
+    const {email, password } = req.body;
+    db.query('SELECT * FROM USERS WHERE EMAIL = ?', [email], async (error, rs)=>{
+        if(error) return console.log(error);
+        if(rs.length === 0) return res.render('login', {message: "No user found"});
+        rs.forEach(ele =>{
+            if(email===ele.EMAIL){
+                if(password===ele.PASSWORD){
+                    return res.render('login', {message:"Login Successfull"});
+                }else{
+                    return res.render('login', {message: "Invalid Password"})
+                }
+            }
+        })
+
+    })
 }
