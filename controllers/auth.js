@@ -30,6 +30,16 @@ exports.register = (req, res) => {
     }
     let haashedPassword = await brcrypt.hash(password, 8);
     console.log(haashedPassword);
+    db.query('INSERT INTO users SET ? ', {name:name, email:email, password:haashedPassword}, (error, results)=>{
+if(error){
+    console.log(error);
+}else{
+    console.log(results);
+    return res.render('register', {
+        message: 'User Registered'
+    })
+}
+    })
     })
     
 }
